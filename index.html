@@ -3,9 +3,431 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Git Hub</title>
+    <title>Tutorial GitHub: do git init ao deploy</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #f4f6f8;
+            --panel: #ffffff;
+            --ink: #18212f;
+            --muted: #5d6978;
+            --line: #d9e0e8;
+            --accent: #1f7a5b;
+            --accent-dark: #15543f;
+            --code-bg: #111827;
+            --code-ink: #e8eef7;
+            --warn: #b85c00;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            line-height: 1.6;
+        }
+
+        header {
+            background: #17202f;
+            color: white;
+            padding: 48px 20px 42px;
+        }
+
+        .wrap {
+            width: min(1120px, calc(100% - 32px));
+            margin: 0 auto;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.5fr) minmax(260px, 0.8fr);
+            gap: 28px;
+            align-items: center;
+        }
+
+        h1,
+        h2,
+        h3 {
+            line-height: 1.2;
+            margin: 0;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 5vw, 4.2rem);
+            max-width: 780px;
+        }
+
+        header p {
+            color: #d5dde8;
+            font-size: 1.12rem;
+            max-width: 720px;
+            margin: 18px 0 0;
+        }
+
+        .quick-card {
+            background: rgba(255, 255, 255, 0.09);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .quick-card strong {
+            display: block;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+        }
+
+        .quick-card ul {
+            padding-left: 18px;
+            margin: 0;
+            color: #e7edf5;
+        }
+
+        nav {
+            background: var(--panel);
+            border-bottom: 1px solid var(--line);
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+
+        nav .wrap {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 12px 0;
+        }
+
+        nav a {
+            color: var(--ink);
+            text-decoration: none;
+            white-space: nowrap;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            background: #fbfcfe;
+        }
+
+        main {
+            padding: 32px 0 56px;
+        }
+
+        section {
+            margin-top: 28px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .badge {
+            width: 36px;
+            height: 36px;
+            display: inline-grid;
+            place-items: center;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            font-weight: 800;
+            flex: 0 0 auto;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .card {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 12px 28px rgba(24, 33, 47, 0.06);
+        }
+
+        .card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .card p,
+        .card li {
+            color: var(--muted);
+        }
+
+        .card p {
+            margin: 0 0 12px;
+        }
+
+        .card ul,
+        .card ol {
+            margin: 10px 0 0;
+            padding-left: 22px;
+        }
+
+        code {
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 0.94em;
+        }
+
+        pre {
+            margin: 12px 0 0;
+            padding: 16px;
+            background: var(--code-bg);
+            color: var(--code-ink);
+            border-radius: 8px;
+            overflow-x: auto;
+            border: 1px solid #263244;
+        }
+
+        .note {
+            border-left: 4px solid var(--accent);
+            background: #eaf5f0;
+            padding: 14px 16px;
+            border-radius: 0 8px 8px 0;
+            color: #214438;
+            margin: 14px 0 0;
+        }
+
+        .warning {
+            border-left-color: var(--warn);
+            background: #fff3e3;
+            color: #624016;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        .flow {
+            display: grid;
+            gap: 12px;
+            margin-top: 14px;
+        }
+
+        .flow div {
+            background: #f8fafc;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 12px 14px;
+        }
+
+        footer {
+            border-top: 1px solid var(--line);
+            color: var(--muted);
+            padding: 26px 0;
+            background: var(--panel);
+            text-align: center;
+        }
+
+        @media (max-width: 800px) {
+            .hero,
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                padding-top: 34px;
+            }
+        }
+    </style>
 </head>
 <body>
-    
+    <header>
+        <div class="wrap hero">
+            <div>
+                <h1>Tutorial GitHub: do <code>git init</code> ao deploy</h1>
+                <p>Um passo a passo direto para criar um repositório local, enviar o projeto para o GitHub e publicar uma landing page com GitHub Pages.</p>
+            </div>
+            <aside class="quick-card">
+                <strong>Você vai aprender:</strong>
+                <ul>
+                    <li>Configurar nome e e-mail do Git</li>
+                    <li>Inicializar um projeto com Git</li>
+                    <li>Subir arquivos para o GitHub</li>
+                    <li>Publicar o site na internet</li>
+                </ul>
+            </aside>
+        </div>
+    </header>
+
+    <nav aria-label="Navegação do tutorial">
+        <div class="wrap">
+            <a href="#configuracao">Configuração</a>
+            <a href="#repositorio-local">Git init</a>
+            <a href="#github">GitHub</a>
+            <a href="#push">Push</a>
+            <a href="#deploy">Deploy</a>
+            <a href="#fluxo">Fluxo diário</a>
+        </div>
+    </nav>
+
+    <main class="wrap">
+        <section id="configuracao">
+            <div class="section-title">
+                <span class="badge">1</span>
+                <h2>Configurar o Git no computador</h2>
+            </div>
+            <div class="grid">
+                <article class="card">
+                    <h3>Identifique seu usuário</h3>
+                    <p>Faça isso uma vez no computador para que seus commits tenham autor correto.</p>
+                    <pre><code>git config --global user.name "Seu Nome"
+git config --global user.email "seu-email@exemplo.com"</code></pre>
+                </article>
+
+                <article class="card">
+                    <h3>Confira a configuração</h3>
+                    <p>Esses comandos mostram qual nome e e-mail serão usados nos commits.</p>
+                    <pre><code>git config user.name
+git config user.email</code></pre>
+                </article>
+            </div>
+            <p class="note">Use o mesmo e-mail cadastrado no GitHub para facilitar a associação dos commits ao seu perfil.</p>
+        </section>
+
+        <section id="repositorio-local">
+            <div class="section-title">
+                <span class="badge">2</span>
+                <h2>Criar o repositório local</h2>
+            </div>
+            <div class="grid">
+                <article class="card">
+                    <h3>Entre na pasta do projeto</h3>
+                    <p>No terminal, navegue até a pasta onde está o seu <code>index.html</code>.</p>
+                    <pre><code>cd caminho/da/sua/pasta</code></pre>
+                </article>
+
+                <article class="card">
+                    <h3>Inicie o Git</h3>
+                    <p>O comando cria a pasta oculta <code>.git</code>, onde o histórico do projeto será guardado.</p>
+                    <pre><code>git init</code></pre>
+                </article>
+
+                <article class="card">
+                    <h3>Veja o estado dos arquivos</h3>
+                    <p>Mostra arquivos novos, modificados ou prontos para commit.</p>
+                    <pre><code>git status</code></pre>
+                </article>
+
+                <article class="card">
+                    <h3>Adicione os arquivos</h3>
+                    <p>Prepara todos os arquivos da pasta para o primeiro commit.</p>
+                    <pre><code>git add .</code></pre>
+                </article>
+
+                <article class="card full">
+                    <h3>Crie o primeiro commit</h3>
+                    <p>O commit salva uma versão do projeto no histórico local.</p>
+                    <pre><code>git commit -m "Projeto inicial"</code></pre>
+                </article>
+            </div>
+        </section>
+
+        <section id="github">
+            <div class="section-title">
+                <span class="badge">3</span>
+                <h2>Criar o repositório no GitHub</h2>
+            </div>
+            <article class="card">
+                <ol>
+                    <li>Acesse <strong>github.com</strong> e entre na sua conta.</li>
+                    <li>Clique em <strong>New repository</strong>.</li>
+                    <li>Digite o nome do repositório, por exemplo <code>minha-landing-page</code>.</li>
+                    <li>Escolha <strong>Public</strong> se quiser usar GitHub Pages sem restrições.</li>
+                    <li>Não marque README, .gitignore ou license se o projeto já existe no computador.</li>
+                    <li>Clique em <strong>Create repository</strong>.</li>
+                </ol>
+                <p class="note warning">Depois de criar o repositório, copie a URL HTTPS mostrada pelo GitHub. Ela será parecida com <code>https://github.com/seu-usuario/minha-landing-page.git</code>.</p>
+            </article>
+        </section>
+
+        <section id="push">
+            <div class="section-title">
+                <span class="badge">4</span>
+                <h2>Conectar e enviar para o GitHub</h2>
+            </div>
+            <div class="grid">
+                <article class="card">
+                    <h3>Renomeie a branch principal</h3>
+                    <p>O padrão mais usado atualmente é chamar a branch principal de <code>main</code>.</p>
+                    <pre><code>git branch -M main</code></pre>
+                </article>
+
+                <article class="card">
+                    <h3>Adicione o repositório remoto</h3>
+                    <p>Troque a URL pelo link do seu repositório no GitHub.</p>
+                    <pre><code>git remote add origin https://github.com/seu-usuario/minha-landing-page.git</code></pre>
+                </article>
+
+                <article class="card">
+                    <h3>Confira o remoto</h3>
+                    <p>Verifique se o Git está apontando para o lugar certo.</p>
+                    <pre><code>git remote -v</code></pre>
+                </article>
+
+                <article class="card">
+                    <h3>Envie o projeto</h3>
+                    <p>O <code>-u</code> conecta sua branch local com a branch remota para facilitar os próximos pushes.</p>
+                    <pre><code>git push -u origin main</code></pre>
+                </article>
+            </div>
+        </section>
+
+        <section id="deploy">
+            <div class="section-title">
+                <span class="badge">5</span>
+                <h2>Fazer deploy com GitHub Pages</h2>
+            </div>
+            <article class="card">
+                <p>Para uma página estática com <code>index.html</code>, o jeito mais simples é publicar pelo próprio GitHub Pages.</p>
+                <ol>
+                    <li>No GitHub, abra o repositório do projeto.</li>
+                    <li>Entre em <strong>Settings</strong>.</li>
+                    <li>No menu lateral, clique em <strong>Pages</strong>.</li>
+                    <li>Em <strong>Build and deployment</strong>, escolha <strong>Deploy from a branch</strong>.</li>
+                    <li>Em <strong>Branch</strong>, selecione <strong>main</strong> e a pasta <strong>/root</strong>.</li>
+                    <li>Clique em <strong>Save</strong>.</li>
+                </ol>
+                <p class="note">Depois de alguns minutos, o GitHub vai mostrar o link publicado. Normalmente ele fica no formato <code>https://seu-usuario.github.io/nome-do-repositorio/</code>.</p>
+            </article>
+        </section>
+
+        <section id="fluxo">
+            <div class="section-title">
+                <span class="badge">6</span>
+                <h2>Fluxo para atualizar o site depois</h2>
+            </div>
+            <article class="card">
+                <p>Sempre que editar o projeto, use este ciclo para salvar e publicar as mudanças:</p>
+                <pre><code>git status
+git add .
+git commit -m "Descreva a alteração"
+git push</code></pre>
+                <div class="flow">
+                    <div><strong>1. Editou arquivos:</strong> altere HTML, CSS, imagens ou scripts normalmente.</div>
+                    <div><strong>2. Fez commit:</strong> salvou uma versão local com uma mensagem clara.</div>
+                    <div><strong>3. Fez push:</strong> enviou a versão para o GitHub.</div>
+                    <div><strong>4. GitHub Pages atualizou:</strong> o deploy acontece automaticamente após o push.</div>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <footer>
+        <div class="wrap">
+            Tutorial prático para publicar projetos HTML no GitHub.
+        </div>
+    </footer>
 </body>
 </html>
