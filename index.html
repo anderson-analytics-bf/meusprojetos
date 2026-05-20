@@ -5,429 +5,708 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tutorial GitHub: do git init ao deploy</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
         :root {
-            color-scheme: light;
-            --bg: #f4f6f8;
-            --panel: #ffffff;
-            --ink: #18212f;
-            --muted: #5d6978;
-            --line: #d9e0e8;
-            --accent: #1f7a5b;
-            --accent-dark: #15543f;
-            --code-bg: #111827;
-            --code-ink: #e8eef7;
-            --warn: #b85c00;
+            --bg: #06080f;
+            --surface: #0d1120;
+            --surface2: #111827;
+            --border: rgba(139, 92, 246, 0.18);
+            --border-dim: rgba(255, 255, 255, 0.07);
+            --ink: #f1f5f9;
+            --muted: #8892a4;
+            --accent: #8b5cf6;
+            --accent-light: #a78bfa;
+            --accent-glow: rgba(139, 92, 246, 0.35);
+            --accent2: #c084fc;
+            --code-bg: #080c16;
+            --code-ink: #c4b5fd;
+            --warn: #f59e0b;
         }
 
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
 
         body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: 'Inter', Arial, sans-serif;
             background: var(--bg);
             color: var(--ink);
-            line-height: 1.6;
-        }
-
-        header {
-            background: #17202f;
-            color: white;
-            padding: 48px 20px 42px;
+            line-height: 1.65;
+            min-height: 100vh;
         }
 
         .wrap {
-            width: min(1120px, calc(100% - 32px));
+            width: min(1140px, calc(100% - 40px));
             margin: 0 auto;
         }
 
-        .hero {
-            display: grid;
-            grid-template-columns: minmax(0, 1.5fr) minmax(260px, 0.8fr);
-            gap: 28px;
-            align-items: center;
+        /* ── HEADER / HERO ── */
+        header {
+            position: relative;
+            overflow: hidden;
+            padding: 0;
+            background: var(--bg);
         }
 
-        h1,
-        h2,
-        h3 {
-            line-height: 1.2;
-            margin: 0;
+        .hero-glow {
+            position: absolute;
+            top: -120px;
+            right: -80px;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(139,92,246,0.22) 0%, transparent 65%);
+            pointer-events: none;
+        }
+
+        .hero-glow-left {
+            position: absolute;
+            bottom: -100px;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(192,132,252,0.10) 0%, transparent 65%);
+            pointer-events: none;
+        }
+
+        .hero-inner {
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.9fr);
+            gap: 60px;
+            align-items: center;
+            padding: 80px 0 72px;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(139,92,246,0.12);
+            border: 1px solid var(--border);
+            border-radius: 99px;
+            padding: 6px 16px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent-light);
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .hero-tag::before {
+            content: '';
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            box-shadow: 0 0 8px var(--accent-light);
         }
 
         h1 {
-            font-size: clamp(2rem, 5vw, 4.2rem);
-            max-width: 780px;
+            font-size: clamp(2.4rem, 5vw, 4rem);
+            font-weight: 900;
+            line-height: 1.08;
+            letter-spacing: -0.02em;
+            color: #fff;
+            margin-bottom: 20px;
         }
 
-        header p {
-            color: #d5dde8;
-            font-size: 1.12rem;
-            max-width: 720px;
-            margin: 18px 0 0;
+        h1 code {
+            font-family: 'Inter', monospace;
+            background: linear-gradient(90deg, var(--accent-light), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: inherit;
+            font-weight: inherit;
         }
 
-        .quick-card {
-            background: rgba(255, 255, 255, 0.09);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            border-radius: 8px;
-            padding: 20px;
+        .hero-sub {
+            color: var(--muted);
+            font-size: 1.1rem;
+            max-width: 520px;
+            line-height: 1.7;
+            margin-bottom: 36px;
         }
 
-        .quick-card strong {
+        .hero-cta {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 13px 28px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 0 28px rgba(139,92,246,0.45);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-light);
+            box-shadow: 0 0 40px rgba(167,139,250,0.55);
+            transform: translateY(-2px);
+        }
+
+        .btn-ghost {
+            background: rgba(255,255,255,0.05);
+            color: var(--ink);
+            border: 1px solid var(--border-dim);
+        }
+
+        .btn-ghost:hover {
+            background: rgba(255,255,255,0.09);
+            transform: translateY(-2px);
+        }
+
+        /* capa image card */
+        .hero-img-wrap {
+            position: relative;
+        }
+
+        .hero-img-card {
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(139,92,246,0.3);
+            box-shadow: 0 0 60px rgba(139,92,246,0.2), 0 24px 64px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .hero-img-card img {
+            width: 100%;
             display: block;
-            font-size: 1.05rem;
-            margin-bottom: 10px;
+            object-fit: cover;
         }
 
-        .quick-card ul {
-            padding-left: 18px;
-            margin: 0;
-            color: #e7edf5;
+        .hero-img-badge {
+            position: absolute;
+            bottom: 18px;
+            left: 18px;
+            background: rgba(6,8,15,0.82);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(12px);
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 0.78rem;
+            color: var(--muted);
         }
 
+        .hero-img-badge strong {
+            display: block;
+            color: var(--accent-light);
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        /* ── NAV ── */
         nav {
-            background: var(--panel);
-            border-bottom: 1px solid var(--line);
+            background: rgba(6,8,15,0.85);
+            border-bottom: 1px solid var(--border-dim);
+            backdrop-filter: blur(16px);
             position: sticky;
             top: 0;
-            z-index: 5;
+            z-index: 10;
         }
 
         nav .wrap {
             display: flex;
-            gap: 10px;
+            align-items: center;
+            gap: 8px;
             overflow-x: auto;
-            padding: 12px 0;
+            padding: 14px 0;
+            scrollbar-width: none;
         }
+
+        nav .wrap::-webkit-scrollbar { display: none; }
 
         nav a {
-            color: var(--ink);
+            color: var(--muted);
             text-decoration: none;
             white-space: nowrap;
-            border: 1px solid var(--line);
             border-radius: 8px;
-            padding: 8px 12px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            background: #fbfcfe;
+            padding: 7px 14px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            transition: all 0.15s;
+            border: 1px solid transparent;
         }
 
+        nav a:hover {
+            color: var(--ink);
+            background: rgba(139,92,246,0.12);
+            border-color: var(--border);
+        }
+
+        /* ── MAIN ── */
         main {
-            padding: 32px 0 56px;
+            padding: 56px 0 80px;
         }
 
         section {
-            margin-top: 28px;
+            margin-top: 64px;
+        }
+
+        section:first-child {
+            margin-top: 0;
         }
 
         .section-title {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
+            gap: 14px;
+            margin-bottom: 24px;
         }
 
         .badge {
-            width: 36px;
-            height: 36px;
+            width: 38px;
+            height: 38px;
             display: inline-grid;
             place-items: center;
             border-radius: 50%;
-            background: var(--accent);
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
             color: white;
             font-weight: 800;
+            font-size: 1rem;
             flex: 0 0 auto;
+            box-shadow: 0 0 20px var(--accent-glow);
         }
 
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -0.01em;
+        }
+
+        h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        /* ── GRID / CARDS ── */
         .grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 18px;
+            gap: 16px;
         }
 
         .card {
-            background: var(--panel);
-            border: 1px solid var(--line);
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 12px 28px rgba(24, 33, 47, 0.06);
+            background: var(--surface);
+            border: 1px solid var(--border-dim);
+            border-radius: 14px;
+            padding: 24px;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        .card h3 {
-            font-size: 1.1rem;
+        .card:hover {
+            border-color: var(--border);
+            box-shadow: 0 0 32px rgba(139,92,246,0.08);
+        }
+
+        .card p, .card li {
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .card p { margin-bottom: 12px; }
+        .card p:last-child { margin-bottom: 0; }
+
+        .card ul, .card ol {
+            padding-left: 20px;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .card ol li, .card ul li {
             margin-bottom: 8px;
         }
 
-        .card p,
-        .card li {
-            color: var(--muted);
+        .card ol li:last-child, .card ul li:last-child {
+            margin-bottom: 0;
         }
 
-        .card p {
-            margin: 0 0 12px;
-        }
+        .card strong { color: var(--ink); }
 
-        .card ul,
-        .card ol {
-            margin: 10px 0 0;
-            padding-left: 22px;
-        }
-
+        /* ── CODE ── */
         code {
-            font-family: Consolas, "Courier New", monospace;
-            font-size: 0.94em;
+            font-family: Consolas, 'Courier New', monospace;
+            font-size: 0.92em;
+            color: var(--accent-light);
+            background: rgba(139,92,246,0.1);
+            padding: 1px 5px;
+            border-radius: 4px;
         }
 
         pre {
-            margin: 12px 0 0;
-            padding: 16px;
+            margin: 14px 0 0;
+            padding: 18px 20px;
             background: var(--code-bg);
-            color: var(--code-ink);
-            border-radius: 8px;
+            border-radius: 10px;
             overflow-x: auto;
-            border: 1px solid #263244;
+            border: 1px solid rgba(139,92,246,0.2);
+            position: relative;
         }
 
+        pre code {
+            background: none;
+            padding: 0;
+            color: var(--code-ink);
+            font-size: 0.91rem;
+            line-height: 1.75;
+        }
+
+        /* ── NOTES ── */
         .note {
-            border-left: 4px solid var(--accent);
-            background: #eaf5f0;
-            padding: 14px 16px;
-            border-radius: 0 8px 8px 0;
-            color: #214438;
-            margin: 14px 0 0;
+            border-left: 3px solid var(--accent);
+            background: rgba(139,92,246,0.08);
+            padding: 14px 18px;
+            border-radius: 0 10px 10px 0;
+            color: #c4b5fd;
+            margin-top: 16px;
+            font-size: 0.94rem;
         }
 
         .warning {
             border-left-color: var(--warn);
-            background: #fff3e3;
-            color: #624016;
+            background: rgba(245,158,11,0.08);
+            color: #fcd34d;
         }
 
-        .full {
-            grid-column: 1 / -1;
-        }
+        .full { grid-column: 1 / -1; }
 
+        /* ── FLOW STEPS ── */
         .flow {
             display: grid;
-            gap: 12px;
-            margin-top: 14px;
+            gap: 10px;
+            margin-top: 18px;
         }
 
-        .flow div {
-            background: #f8fafc;
-            border: 1px solid var(--line);
-            border-radius: 8px;
-            padding: 12px 14px;
+        .flow-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            background: var(--surface2);
+            border: 1px solid var(--border-dim);
+            border-radius: 10px;
+            padding: 14px 16px;
         }
 
-        footer {
-            border-top: 1px solid var(--line);
+        .flow-num {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: rgba(139,92,246,0.2);
+            border: 1px solid var(--border);
+            color: var(--accent-light);
+            font-size: 0.78rem;
+            font-weight: 800;
+            display: grid;
+            place-items: center;
+            flex: 0 0 auto;
+            margin-top: 1px;
+        }
+
+        .flow-step p {
             color: var(--muted);
-            padding: 26px 0;
-            background: var(--panel);
-            text-align: center;
+            font-size: 0.9rem;
+            margin: 0;
         }
 
-        @media (max-width: 800px) {
-            .hero,
-            .grid {
+        .flow-step strong { color: var(--ink); }
+
+        /* ── DIVIDER ── */
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
+            margin: 64px 0 0;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            border-top: 1px solid var(--border-dim);
+            color: var(--muted);
+            padding: 32px 0;
+            background: var(--surface);
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        footer span {
+            color: var(--accent-light);
+            font-weight: 600;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 840px) {
+            .hero-inner, .grid {
                 grid-template-columns: 1fr;
             }
 
-            header {
-                padding-top: 34px;
+            .hero-inner {
+                padding: 56px 0 48px;
+                gap: 40px;
+            }
+
+            h1 { font-size: 2.2rem; }
+
+            .hero-img-wrap {
+                max-width: 420px;
+                margin: 0 auto;
             }
         }
     </style>
 </head>
 <body>
+
+    <!-- ── HERO ── -->
     <header>
-        <div class="wrap hero">
-            <div>
-                <h1>Tutorial GitHub: do <code>git init</code> ao deploy</h1>
-                <p>Um passo a passo direto para criar um repositório local, enviar o projeto para o GitHub e publicar uma landing page com GitHub Pages.</p>
+        <div class="hero-glow"></div>
+        <div class="hero-glow-left"></div>
+        <div class="wrap">
+            <div class="hero-inner">
+                <div>
+                    <div class="hero-tag">Tutorial Prático</div>
+                    <h1>Do <code>git init</code><br>ao deploy no<br>GitHub Pages</h1>
+                    <p class="hero-sub">
+                        Um passo a passo direto para criar um repositório local,
+                        enviar seu projeto para o GitHub e publicar uma landing
+                        page na internet — do zero ao ar.
+                    </p>
+                    <div class="hero-cta">
+                        <a href="#configuracao" class="btn btn-primary">Começar agora</a>
+                        <a href="#fluxo" class="btn btn-ghost">Ver fluxo diário</a>
+                    </div>
+                </div>
+
+                <div class="hero-img-wrap">
+                    <div class="hero-img-card">
+                        <img src="github.png" alt="GitHub Octocat com interface de código">
+                        <div class="hero-img-badge">
+                            <strong>6 etapas</strong>
+                            do repositório local ao site no ar
+                        </div>
+                    </div>
+                </div>
             </div>
-            <aside class="quick-card">
-                <strong>Você vai aprender:</strong>
-                <ul>
-                    <li>Configurar nome e e-mail do Git</li>
-                    <li>Inicializar um projeto com Git</li>
-                    <li>Subir arquivos para o GitHub</li>
-                    <li>Publicar o site na internet</li>
-                </ul>
-            </aside>
         </div>
     </header>
 
+    <!-- ── NAV ── -->
     <nav aria-label="Navegação do tutorial">
         <div class="wrap">
-            <a href="#configuracao">Configuração</a>
-            <a href="#repositorio-local">Git init</a>
-            <a href="#github">GitHub</a>
-            <a href="#push">Push</a>
-            <a href="#deploy">Deploy</a>
-            <a href="#fluxo">Fluxo diário</a>
+            <a href="#configuracao">⚙️ Configuração</a>
+            <a href="#repositorio-local">📁 Git init</a>
+            <a href="#github">🐙 GitHub</a>
+            <a href="#push">🚀 Push</a>
+            <a href="#deploy">🌐 Deploy</a>
+            <a href="#fluxo">🔄 Fluxo diário</a>
         </div>
     </nav>
 
-    <main class="wrap">
-        <section id="configuracao">
-            <div class="section-title">
-                <span class="badge">1</span>
-                <h2>Configurar o Git no computador</h2>
-            </div>
-            <div class="grid">
-                <article class="card">
-                    <h3>Identifique seu usuário</h3>
-                    <p>Faça isso uma vez no computador para que seus commits tenham autor correto.</p>
-                    <pre><code>git config --global user.name "Seu Nome"
-git config --global user.email "seu-email@exemplo.com"</code></pre>
-                </article>
+    <!-- ── CONTENT ── -->
+    <main>
+        <div class="wrap">
 
-                <article class="card">
-                    <h3>Confira a configuração</h3>
-                    <p>Esses comandos mostram qual nome e e-mail serão usados nos commits.</p>
-                    <pre><code>git config user.name
+            <!-- 1. Configuração -->
+            <section id="configuracao">
+                <div class="section-title">
+                    <span class="badge">1</span>
+                    <h2>Configurar o Git no computador</h2>
+                </div>
+                <div class="grid">
+                    <article class="card">
+                        <h3>Identifique seu usuário</h3>
+                        <p>Faça isso uma vez no computador para que seus commits tenham o autor correto.</p>
+                        <pre><code>git config --global user.name "Seu Nome"
+git config --global user.email "seu@email.com"</code></pre>
+                    </article>
+
+                    <article class="card">
+                        <h3>Confira a configuração</h3>
+                        <p>Esses comandos mostram qual nome e e-mail serão usados nos commits.</p>
+                        <pre><code>git config user.name
 git config user.email</code></pre>
-                </article>
-            </div>
-            <p class="note">Use o mesmo e-mail cadastrado no GitHub para facilitar a associação dos commits ao seu perfil.</p>
-        </section>
+                    </article>
+                </div>
+                <p class="note">Use o mesmo e-mail cadastrado no GitHub para associar os commits ao seu perfil automaticamente.</p>
+            </section>
 
-        <section id="repositorio-local">
-            <div class="section-title">
-                <span class="badge">2</span>
-                <h2>Criar o repositório local</h2>
-            </div>
-            <div class="grid">
+            <div class="section-divider"></div>
+
+            <!-- 2. Repositório local -->
+            <section id="repositorio-local">
+                <div class="section-title">
+                    <span class="badge">2</span>
+                    <h2>Criar o repositório local</h2>
+                </div>
+                <div class="grid">
+                    <article class="card">
+                        <h3>Entre na pasta do projeto</h3>
+                        <p>No terminal, navegue até a pasta onde está o seu <code>index.html</code>.</p>
+                        <pre><code>cd caminho/da/sua/pasta</code></pre>
+                    </article>
+
+                    <article class="card">
+                        <h3>Inicie o Git</h3>
+                        <p>Cria a pasta oculta <code>.git</code> onde o histórico do projeto será guardado.</p>
+                        <pre><code>git init</code></pre>
+                    </article>
+
+                    <article class="card">
+                        <h3>Veja o estado dos arquivos</h3>
+                        <p>Mostra arquivos novos, modificados ou prontos para commit.</p>
+                        <pre><code>git status</code></pre>
+                    </article>
+
+                    <article class="card">
+                        <h3>Adicione os arquivos</h3>
+                        <p>Prepara todos os arquivos da pasta para o primeiro commit.</p>
+                        <pre><code>git add .</code></pre>
+                    </article>
+
+                    <article class="card full">
+                        <h3>Crie o primeiro commit</h3>
+                        <p>O commit salva uma versão do projeto no histórico local com uma mensagem descritiva.</p>
+                        <pre><code>git commit -m "Projeto inicial"</code></pre>
+                    </article>
+                </div>
+            </section>
+
+            <div class="section-divider"></div>
+
+            <!-- 3. GitHub -->
+            <section id="github">
+                <div class="section-title">
+                    <span class="badge">3</span>
+                    <h2>Criar o repositório no GitHub</h2>
+                </div>
                 <article class="card">
-                    <h3>Entre na pasta do projeto</h3>
-                    <p>No terminal, navegue até a pasta onde está o seu <code>index.html</code>.</p>
-                    <pre><code>cd caminho/da/sua/pasta</code></pre>
+                    <ol>
+                        <li>Acesse <strong>github.com</strong> e entre na sua conta.</li>
+                        <li>Clique em <strong>New repository</strong>.</li>
+                        <li>Digite o nome, por exemplo <code>minha-landing-page</code>.</li>
+                        <li>Escolha <strong>Public</strong> se quiser usar GitHub Pages sem restrições.</li>
+                        <li>Não marque README, .gitignore ou license — o projeto já existe no seu computador.</li>
+                        <li>Clique em <strong>Create repository</strong>.</li>
+                    </ol>
+                    <p class="note warning">Depois de criar o repositório, copie a URL HTTPS exibida pelo GitHub — algo como <code>https://github.com/seu-usuario/minha-landing-page.git</code>.</p>
                 </article>
+            </section>
 
+            <div class="section-divider"></div>
+
+            <!-- 4. Push -->
+            <section id="push">
+                <div class="section-title">
+                    <span class="badge">4</span>
+                    <h2>Conectar e enviar para o GitHub</h2>
+                </div>
+                <div class="grid">
+                    <article class="card">
+                        <h3>Renomeie a branch principal</h3>
+                        <p>O padrão mais usado atualmente é <code>main</code>.</p>
+                        <pre><code>git branch -M main</code></pre>
+                    </article>
+
+                    <article class="card">
+                        <h3>Adicione o repositório remoto</h3>
+                        <p>Substitua a URL pelo link do seu repositório no GitHub.</p>
+                        <pre><code>git remote add origin https://github.com/seu-usuario/minha-landing-page.git</code></pre>
+                    </article>
+
+                    <article class="card">
+                        <h3>Confira o remoto</h3>
+                        <p>Verifique se o Git está apontando para o lugar certo.</p>
+                        <pre><code>git remote -v</code></pre>
+                    </article>
+
+                    <article class="card">
+                        <h3>Envie o projeto</h3>
+                        <p>O <code>-u</code> conecta sua branch local com a remota para facilitar próximos pushes.</p>
+                        <pre><code>git push -u origin main</code></pre>
+                    </article>
+                </div>
+            </section>
+
+            <div class="section-divider"></div>
+
+            <!-- 5. Deploy -->
+            <section id="deploy">
+                <div class="section-title">
+                    <span class="badge">5</span>
+                    <h2>Fazer deploy com GitHub Pages</h2>
+                </div>
                 <article class="card">
-                    <h3>Inicie o Git</h3>
-                    <p>O comando cria a pasta oculta <code>.git</code>, onde o histórico do projeto será guardado.</p>
-                    <pre><code>git init</code></pre>
+                    <p>Para uma página estática com <code>index.html</code>, o jeito mais simples é publicar pelo GitHub Pages diretamente.</p>
+                    <ol>
+                        <li>No GitHub, abra o repositório do projeto.</li>
+                        <li>Entre em <strong>Settings</strong>.</li>
+                        <li>No menu lateral, clique em <strong>Pages</strong>.</li>
+                        <li>Em <strong>Build and deployment</strong>, escolha <strong>Deploy from a branch</strong>.</li>
+                        <li>Em <strong>Branch</strong>, selecione <strong>main</strong> e a pasta <strong>/root</strong>.</li>
+                        <li>Clique em <strong>Save</strong>.</li>
+                    </ol>
+                    <p class="note">Depois de alguns minutos, o GitHub exibe o link publicado — normalmente no formato <code>https://seu-usuario.github.io/nome-do-repositorio/</code>.</p>
                 </article>
+            </section>
 
+            <div class="section-divider"></div>
+
+            <!-- 6. Fluxo diário -->
+            <section id="fluxo">
+                <div class="section-title">
+                    <span class="badge">6</span>
+                    <h2>Fluxo para atualizar o site</h2>
+                </div>
                 <article class="card">
-                    <h3>Veja o estado dos arquivos</h3>
-                    <p>Mostra arquivos novos, modificados ou prontos para commit.</p>
-                    <pre><code>git status</code></pre>
-                </article>
-
-                <article class="card">
-                    <h3>Adicione os arquivos</h3>
-                    <p>Prepara todos os arquivos da pasta para o primeiro commit.</p>
-                    <pre><code>git add .</code></pre>
-                </article>
-
-                <article class="card full">
-                    <h3>Crie o primeiro commit</h3>
-                    <p>O commit salva uma versão do projeto no histórico local.</p>
-                    <pre><code>git commit -m "Projeto inicial"</code></pre>
-                </article>
-            </div>
-        </section>
-
-        <section id="github">
-            <div class="section-title">
-                <span class="badge">3</span>
-                <h2>Criar o repositório no GitHub</h2>
-            </div>
-            <article class="card">
-                <ol>
-                    <li>Acesse <strong>github.com</strong> e entre na sua conta.</li>
-                    <li>Clique em <strong>New repository</strong>.</li>
-                    <li>Digite o nome do repositório, por exemplo <code>minha-landing-page</code>.</li>
-                    <li>Escolha <strong>Public</strong> se quiser usar GitHub Pages sem restrições.</li>
-                    <li>Não marque README, .gitignore ou license se o projeto já existe no computador.</li>
-                    <li>Clique em <strong>Create repository</strong>.</li>
-                </ol>
-                <p class="note warning">Depois de criar o repositório, copie a URL HTTPS mostrada pelo GitHub. Ela será parecida com <code>https://github.com/seu-usuario/minha-landing-page.git</code>.</p>
-            </article>
-        </section>
-
-        <section id="push">
-            <div class="section-title">
-                <span class="badge">4</span>
-                <h2>Conectar e enviar para o GitHub</h2>
-            </div>
-            <div class="grid">
-                <article class="card">
-                    <h3>Renomeie a branch principal</h3>
-                    <p>O padrão mais usado atualmente é chamar a branch principal de <code>main</code>.</p>
-                    <pre><code>git branch -M main</code></pre>
-                </article>
-
-                <article class="card">
-                    <h3>Adicione o repositório remoto</h3>
-                    <p>Troque a URL pelo link do seu repositório no GitHub.</p>
-                    <pre><code>git remote add origin https://github.com/seu-usuario/minha-landing-page.git</code></pre>
-                </article>
-
-                <article class="card">
-                    <h3>Confira o remoto</h3>
-                    <p>Verifique se o Git está apontando para o lugar certo.</p>
-                    <pre><code>git remote -v</code></pre>
-                </article>
-
-                <article class="card">
-                    <h3>Envie o projeto</h3>
-                    <p>O <code>-u</code> conecta sua branch local com a branch remota para facilitar os próximos pushes.</p>
-                    <pre><code>git push -u origin main</code></pre>
-                </article>
-            </div>
-        </section>
-
-        <section id="deploy">
-            <div class="section-title">
-                <span class="badge">5</span>
-                <h2>Fazer deploy com GitHub Pages</h2>
-            </div>
-            <article class="card">
-                <p>Para uma página estática com <code>index.html</code>, o jeito mais simples é publicar pelo próprio GitHub Pages.</p>
-                <ol>
-                    <li>No GitHub, abra o repositório do projeto.</li>
-                    <li>Entre em <strong>Settings</strong>.</li>
-                    <li>No menu lateral, clique em <strong>Pages</strong>.</li>
-                    <li>Em <strong>Build and deployment</strong>, escolha <strong>Deploy from a branch</strong>.</li>
-                    <li>Em <strong>Branch</strong>, selecione <strong>main</strong> e a pasta <strong>/root</strong>.</li>
-                    <li>Clique em <strong>Save</strong>.</li>
-                </ol>
-                <p class="note">Depois de alguns minutos, o GitHub vai mostrar o link publicado. Normalmente ele fica no formato <code>https://seu-usuario.github.io/nome-do-repositorio/</code>.</p>
-            </article>
-        </section>
-
-        <section id="fluxo">
-            <div class="section-title">
-                <span class="badge">6</span>
-                <h2>Fluxo para atualizar o site depois</h2>
-            </div>
-            <article class="card">
-                <p>Sempre que editar o projeto, use este ciclo para salvar e publicar as mudanças:</p>
-                <pre><code>git status
+                    <p>Sempre que editar o projeto, use este ciclo para salvar e publicar as mudanças:</p>
+                    <pre><code>git status
 git add .
 git commit -m "Descreva a alteração"
 git push</code></pre>
-                <div class="flow">
-                    <div><strong>1. Editou arquivos:</strong> altere HTML, CSS, imagens ou scripts normalmente.</div>
-                    <div><strong>2. Fez commit:</strong> salvou uma versão local com uma mensagem clara.</div>
-                    <div><strong>3. Fez push:</strong> enviou a versão para o GitHub.</div>
-                    <div><strong>4. GitHub Pages atualizou:</strong> o deploy acontece automaticamente após o push.</div>
-                </div>
-            </article>
-        </section>
+
+                    <div class="flow" style="margin-top: 20px;">
+                        <div class="flow-step">
+                            <div class="flow-num">1</div>
+                            <p><strong>Editou arquivos</strong> — altere HTML, CSS, imagens ou scripts normalmente.</p>
+                        </div>
+                        <div class="flow-step">
+                            <div class="flow-num">2</div>
+                            <p><strong>Fez commit</strong> — salvou uma versão local com uma mensagem clara.</p>
+                        </div>
+                        <div class="flow-step">
+                            <div class="flow-num">3</div>
+                            <p><strong>Fez push</strong> — enviou a versão para o repositório no GitHub.</p>
+                        </div>
+                        <div class="flow-step">
+                            <div class="flow-num">4</div>
+                            <p><strong>GitHub Pages atualizou</strong> — o deploy acontece automaticamente após o push.</p>
+                        </div>
+                    </div>
+                </article>
+            </section>
+
+        </div>
     </main>
 
     <footer>
         <div class="wrap">
-            Tutorial prático para publicar projetos HTML no GitHub.
+            Tutorial prático · Publicar projetos HTML no <span>GitHub</span>
         </div>
     </footer>
+
 </body>
 </html>
