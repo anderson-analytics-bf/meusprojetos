@@ -441,6 +441,7 @@
             <a href="#github"><i class="bi bi-github"></i> GitHub</a>
             <a href="#push"><i class="bi bi-cloud-upload"></i> Push</a>
             <a href="#deploy"><i class="bi bi-globe"></i> Deploy</a>
+            <a href="#historico"><i class="bi bi-clock-history"></i> Histórico</a>
             <a href="#fluxo"><i class="bi bi-arrow-repeat"></i> Fluxo diário</a>
         </div>
     </nav>
@@ -594,10 +595,65 @@ git config user.email</code></pre>
 
             <div class="section-divider"></div>
 
-            <!-- 6. Fluxo diário -->
+            <!-- 7. Histórico e versões -->
+            <section id="historico">
+                <div class="section-title">
+                    <span class="badge">7</span>
+                    <h2>Ver e navegar pelo histórico</h2>
+                </div>
+                <div class="grid">
+                    <article class="card">
+                        <h3>Ver o histórico de commits</h3>
+                        <p>Lista todos os commits com autor, data e mensagem. Pressione <code>q</code> para sair.</p>
+                        <pre><code>git log</code></pre>
+                        <p style="margin-top:12px">Versão compacta, uma linha por commit:</p>
+                        <pre><code>git log --oneline</code></pre>
+                    </article>
+
+                    <article class="card">
+                        <h3>Inspecionar um commit específico</h3>
+                        <p>Mostra tudo que foi alterado naquele commit. Use o hash exibido pelo <code>git log</code>.</p>
+                        <pre><code>git show a3f8c1d</code></pre>
+                        <p style="margin-top:12px">Ver diferença entre o estado atual e um commit antigo:</p>
+                        <pre><code>git diff a3f8c1d</code></pre>
+                    </article>
+
+                    <article class="card">
+                        <h3>Visitar uma versão antiga <em>sem</em> reverter</h3>
+                        <p>Coloca o repositório em modo "leitura" naquele commit — você vê os arquivos como eram, sem alterar o histórico. Para voltar ao estado atual:</p>
+                        <pre><code>git checkout a3f8c1d
+
+git checkout main</code></pre>
+                    </article>
+
+                    <article class="card">
+                        <h3>Reverter um commit de forma segura</h3>
+                        <p><code>git revert</code> cria um <strong>novo commit</strong> que desfaz as mudanças do commit indicado. O histórico fica intacto — ideal para branches compartilhadas.</p>
+                        <pre><code>git revert a3f8c1d</code></pre>
+                    </article>
+
+                    <article class="card full">
+                        <h3>Resetar para um commit anterior</h3>
+                        <p>Ao contrário do revert, o <code>reset</code> <strong>reescreve o histórico</strong>. Existem três modos:</p>
+                        <pre><code># Mantém as mudanças staged (prontas para novo commit)
+git reset --soft a3f8c1d
+
+# Mantém as mudanças no disco, mas fora do stage (padrão)
+git reset --mixed a3f8c1d
+
+# Apaga tudo — arquivos voltam ao estado do commit
+git reset --hard a3f8c1d</code></pre>
+                        <p class="note warning"><i class="bi bi-exclamation-triangle"></i> <strong>Cuidado com <code>--hard</code>:</strong> as alterações nos arquivos são perdidas permanentemente. Use somente em branches locais que ainda não foram enviadas ao GitHub.</p>
+                    </article>
+                </div>
+            </section>
+
+            <div class="section-divider"></div>
+
+            <!-- 8. Fluxo diário -->
             <section id="fluxo">
                 <div class="section-title">
-                    <span class="badge">6</span>
+                    <span class="badge">8</span>
                     <h2>Fluxo para atualizar o site</h2>
                 </div>
                 <article class="card">
